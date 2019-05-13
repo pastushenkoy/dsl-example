@@ -1,26 +1,34 @@
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Tests.DSL.Builders
 {
 	public class OrderBuilder
 	{
-		private Order _order;
-
+		private DateTime _date;
+		private readonly List<OrderLine> _lines = new List<OrderLine>();
+		
 		public OrderBuilder Dated(DateTime date)
 		{
-			_order = new Order(date);
+			_date = date;
 			return this;
 		}
 
 		public OrderBuilder With(OrderLine orderLine)
 		{
-			_order.AddLine(orderLine);
+			_lines.Add(orderLine);
 			return this;
 		}
 
 		public Order Please()
 		{
-			return _order;
+			var order = new Order(_date);
+			foreach (var line in _lines)
+			{
+				order.AddLine(line);
+			}
+			
+			return order;
 		}
 	}
 }
